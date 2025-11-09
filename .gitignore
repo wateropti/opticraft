@@ -1,0 +1,21 @@
+# Python / Web
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+.env
+
+# Minecraft server data
+world/
+logs/
+cache/
+*.jar
+
+# Backups
+backups/
+*.tar.gz
+
+# OS / Misc
+.DS_Store
+Thumbs.db
