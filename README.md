@@ -5,7 +5,7 @@
 <h1 align="center">🧱 OptiCraft</h1>
 <p align="center">
   <b>Ein vollautomatisches CraftAttack-Style Minecraft Server Setup</b><br>
-  <sub>by optiwater · GitHub: <a href="https://github.com/optiwater">optiwater</a></sub>
+  <sub>by wateropti · GitHub: <a href="https://github.com/wateropti">wateropti</a></sub>
 </p>
 
 <p align="center">
