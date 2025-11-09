@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/optiwater/opticraft/main/assets/opticraft_logo.png" alt="OptiCraft Logo" width="300">
+  <img src="https://github.com/wateropti/opticraft/blob/main/assets/opticraft_logo.png" alt="OptiCraft Logo" width="300">
 </p>
 
 <h1 align="center">🧱 OptiCraft</h1>
