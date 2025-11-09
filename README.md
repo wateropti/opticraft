@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/wateropti/opticraft/blob/main/assets/opticraft_logo.png" alt="OptiCraft Logo" width="300">
+  <img src="https://github.com/wateropti/opticraft/main/assets/opticraft_logo.png" alt="OptiCraft Logo" width="300">
 </p>
 
 <h1 align="center">🧱 OptiCraft</h1>
@@ -41,6 +41,42 @@ Das Setup ist für **Proxmox-LXC Container (Debian 12)** optimiert und kann mit 
 ### 🪄 1. Installationsbefehl
 
 ```bash
-wget https://raw.githubusercontent.com/optiwater/opticraft/main/installer/opticraft_installer.sh
+wget https://raw.githubusercontent.com/wateropti/opticraft/main/installer/opticraft_installer.sh
 chmod +x opticraft_installer.sh
 sudo ./opticraft_installer.sh
+```
+
+### 💾 2. Nach der Installation
+| Funktion            | Beschreibung                                  |
+| ------------------- | --------------------------------------------- |
+| 🌐 **Webinterface** | `http://<LXC-IP>:8080`                        |
+| 🎮 **Serverport**   | `25565`                                       |
+| 📦 **Backups**      | Täglich 03:00 Uhr in `/opt/minecraft/backups` |
+| 🔁 **Autostart**    | Aktiv für Server & Webinterface               |
+| 🗺️ **Spawn**       | Automatisch bei `0 / 256 / 0`                 |
+| ⚡ **Mods**          | Sodium, Lithium, Fabric API, Voice Chat, etc. |
+
+
+### 💡 Tipps
+
+- Logo im Minecraft MOTD aktivieren - in server.properties:
+```ini
+motd=§6§lOptiCraft §7- §aWillkommen auf dem Server!
+```
+- Favicon fürs Webinterface:
+```bash
+cp assets/opticraft_logo.png /opt/minecraft/webadmin/static/favicon.png
+```
+
+### 🧑‍💻 Autor
+
+wateropti
+
+- GitHub: <a href="https://github.com/wateropti">wateropti</a></sub>
+
+### 📜 Lizenz
+
+Dieses Projekt steht unter der MIT License.<br>
+Siehe <a href="https://github.com/wateropti/LICENSE">LICENSE</a></sub> für Details.
+
+© 2025 wateropti · OptiCraft Project
