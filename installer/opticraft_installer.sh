@@ -28,7 +28,7 @@ fi
 # --- Systempakete ---
 echo "=== 📦 Installiere Abhängigkeiten ==="
 apt update -y
-apt install -y openjdk-21-jre-headless python3 python3-pip screen wget curl unzip tar cron sudo
+apt install -y openjdk-17-jre-headless python3 python3-pip screen wget curl unzip tar cron sudo
 
 # --- Benutzer & Verzeichnisse ---
 if ! id "minecraft" &>/dev/null; then
