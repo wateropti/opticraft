@@ -1,7 +1,7 @@
 #!/bin/bash
 # ==========================================================
-# OptiCraft - Fabric Server Installer (light)
-# lädt WebUI + Templates direkt von GitHub
+# OptiCraft - Fabric Server Installer (Debian 12 / LXC ready)
+# Author: wateropti
 # ==========================================================
 set -euo pipefail
 
@@ -12,8 +12,8 @@ SERVER_NAME="OptiCraft"
 echo "=== 🌍 $SERVER_NAME Fabric Server Installation ==="
 
 # --- Eingaben
-read -p "Minecraft-Version (z.B. 1.21.1) [1.21.1]: " MC_VERSION
-MC_VERSION=${MC_VERSION:-1.21.1}
+read -p "Minecraft-Version (z.B. 1.21.10) [1.21.10]: " MC_VERSION
+MC_VERSION=${MC_VERSION:-1.21.10}
 
 read -p "RAM (z.B. 4G) [4G]: " RAM
 RAM=${RAM:-4G}
@@ -22,39 +22,44 @@ read -p "EULA akzeptieren? (yes/no): " EULA
 [[ "$EULA" == "yes" ]] || { echo "❌ Du musst der EULA zustimmen."; exit 1; }
 
 # --- Pakete
+echo "📦 Installiere Abhängigkeiten..."
 apt update -y
 apt install -y openjdk-17-jre-headless python3 python3-pip screen wget curl unzip tar cron sudo jq
 
-# --- Benutzer + Verzeichnis
+# --- Benutzer & Verzeichnis
 if ! id "minecraft" &>/dev/null; then
-  useradd -m -r -d "$SERVER_DIR" -s /bin/bash minecraft
+  useradd -m -r -s /bin/bash minecraft || adduser --system --home "$SERVER_DIR" minecraft
   echo "✅ Benutzer 'minecraft' erstellt."
 fi
+
 mkdir -p "$SERVER_DIR"
 chown -R minecraft:minecraft "$SERVER_DIR"
 
-# --- Fabric-Server
-sudo -u minecraft bash <<EOF
+# --- Fabric-Server Setup (als minecraft)
+su -s /bin/bash -c "
 set -e
-cd "$SERVER_DIR"
-wget -q -O fabric-installer.jar "https://meta.fabricmc.net/v2/versions/installer/1.0.1/fabric-installer.jar"
+cd '$SERVER_DIR'
+echo '=== 🌐 Lade Fabric Installer ==='
+wget -q -O fabric-installer.jar https://meta.fabricmc.net/v2/versions/installer/1.0.1/fabric-installer.jar
+echo '=== ⚙️ Installiere Fabric Server für Version $MC_VERSION ==='
 java -jar fabric-installer.jar server -mcversion $MC_VERSION -downloadMinecraft
-echo "eula=true" > eula.txt
-EOF
+echo 'eula=true' > eula.txt
+" minecraft
 
 # --- Mods
-sudo -u minecraft bash <<'EOF'
-cd /opt/minecraft
+su -s /bin/bash -c "
+cd '$SERVER_DIR'
 mkdir -p mods
+echo '=== 📦 Lade Mods herunter... ==='
 for u in \
-  "https://cdn.modrinth.com/data/P7dR8mSH/versions/latest/fabric-api.jar" \
-  "https://cdn.modrinth.com/data/AANobbMI/versions/latest/sodium-fabric.jar" \
-  "https://cdn.modrinth.com/data/gvQqBUqZ/versions/latest/lithium-fabric.jar" \
-  "https://cdn.modrinth.com/data/H8CaAYZC/versions/latest/starlight-fabric.jar" \
-  "https://cdn.modrinth.com/data/9eGKb6K1/versions/latest/simple-voice-chat.jar"; do
-  wget -q -P mods "$u"
+  'https://cdn.modrinth.com/data/P7dR8mSH/versions/latest/fabric-api.jar' \
+  'https://cdn.modrinth.com/data/AANobbMI/versions/latest/sodium-fabric.jar' \
+  'https://cdn.modrinth.com/data/gvQqBUqZ/versions/latest/lithium-fabric.jar' \
+  'https://cdn.modrinth.com/data/H8CaAYZC/versions/latest/starlight-fabric.jar' \
+  'https://cdn.modrinth.com/data/9eGKb6K1/versions/latest/simple-voice-chat.jar'; do
+  wget -q -P mods \"\$u\" && echo \"→ \$(basename \$u)\" || echo \"⚠️ Fehler bei \$u\"
 done
-EOF
+" minecraft
 
 # --- Startscript
 cat > "$SERVER_DIR/start.sh" <<EOSTART
@@ -63,6 +68,7 @@ cd "\$(dirname "\$0")"
 exec java -Xmx$RAM -Xms$RAM -jar fabric-server-launch.jar nogui
 EOSTART
 chmod +x "$SERVER_DIR/start.sh"
+chown minecraft:minecraft "$SERVER_DIR/start.sh"
 
 # --- Backup
 cat > "$SERVER_DIR/backup.sh" <<'EOBACK'
@@ -76,8 +82,8 @@ EOBACK
 chmod +x "$SERVER_DIR/backup.sh"
 (crontab -l 2>/dev/null; echo "0 3 * * * /opt/minecraft/backup.sh >> /opt/minecraft/backup.log 2>&1") | crontab -
 
-# --- Webinterface herunterladen
-echo "=== 🌐 Lade Webinterface von GitHub ($REPO_BASE/webadmin) ==="
+# --- Webinterface
+echo "🌐 Lade Webinterface vom GitHub-Repo..."
 mkdir -p "$SERVER_DIR/webadmin/templates" "$SERVER_DIR/webadmin/static"
 wget -q -O "$SERVER_DIR/webadmin/app.py" "$REPO_BASE/webadmin/app.py"
 for tpl in index.html whitelist.html status.html diagnose.html; do
