@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>OptiCraft Admin</title>
+<link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<h1>🧱 OptiCraft Admin Panel</h1>
+<img src="/static/opticraft_logo.png" alt="OptiCraft Logo" width="220" style="margin-bottom:10px;" onerror="this.style.display='none'">
+<p>
+  <a href="/status">Status</a> |
+  <a href="/start">Start</a> |
+  <a href="/stop">Stop</a> |
+  <a href="/restart">Restart</a> |
+  <a href="/diagnose">Diagnose</a> |
+  <a href="/whitelist">Whitelist</a> |
+  <a href="/logs">Logs</a>
+</p>
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}<ul>{% for category, message in messages %}
+<li><b>{{ category }}:</b> {{ message }}</li>
+{% endfor %}</ul>{% endif %}{% endwith %}
+</body>
+</html>
