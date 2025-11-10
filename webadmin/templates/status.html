@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>OptiCraft Status</title>
+<link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+<script>
+async function updateStatus(){
+  const res = await fetch('/status');
+  const data = await res.json();
+  const out = document.getElementById('out');
+  if(data.online){
+    out.innerHTML = `<b>Status:</b> 🟢 Online<br>
+    <b>MotD:</b> ${data.motd}<br>
+    <b>Spieler:</b> ${data.players_online}<br>
+    <b>Namen:</b> ${data.players.join(', ')||'-'}<br>
+    <b>Latenz:</b> ${data.latency} ms<br>
+    <b>Letzte Abfrage:</b> ${data.time}`;
+  } else {
+    out.innerHTML = '<b>Status:</b> 🔴 Offline';
+  }
+}
+setInterval(updateStatus, 5000); window.onload = updateStatus;
+</script>
+</head>
+<body>
+<h1>🌍 OptiCraft Server Status</h1>
+<div id="out">Lade Status...</div>
+<p><a href="/">⬅ Zurück</a></p>
+</body>
+</html>
