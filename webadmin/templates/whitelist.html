@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Whitelist</title>
+<link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+</head>
+<body>
+<h1>Whitelist</h1>
+<form action="/whitelist/add" method="POST">
+  <input type="text" name="playername" placeholder="Spielername" required>
+  <button type="submit">Hinzufügen</button>
+</form>
+<ul>
+  {% for p in players %}
+    <li>{{ p.name }} <a href="/whitelist/remove/{{ p.name }}">❌ Entfernen</a></li>
+  {% endfor %}
+</ul>
+<p><a href="/">⬅ Zurück</a></p>
+</body>
+</html>
