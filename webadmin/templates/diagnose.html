@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>OptiCraft Diagnose</title>
+<link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+<script>
+setTimeout(()=>{ location.reload(); }, 10000);
+</script>
+</head>
+<body>
+<h1>🧠 OptiCraft Diagnose</h1>
+<p><a href="/">⬅ Zurück</a></p>
+<table>
+  <tr><th>Komponente</th><th>Status</th></tr>
+  <tr><td>🧱 Minecraft Server</td><td>{{ '🟢 Läuft' if diag.minecraft_running else '🔴 Offline' }}</td></tr>
+  <tr><td>☕ Java Version</td><td>{{ diag.java_version }}</td></tr>
+  <tr><td>⚙️ CPU-Auslastung</td><td>{{ diag.cpu_usage }} %</td></tr>
+  <tr><td>💾 RAM-Nutzung</td><td>{{ diag.mem_usage }} %</td></tr>
+  <tr><td>📦 Letztes Backup</td><td>{{ diag.last_backup }} ({{ diag.backup_size_mb }} MB)</td></tr>
+  <tr><td>🌐 Webinterface-Uptime</td><td>{{ diag.web_uptime }}</td></tr>
+</table>
+<p><small>Aktualisierung alle 10 Sekunden</small></p>
+</body>
+</html>
